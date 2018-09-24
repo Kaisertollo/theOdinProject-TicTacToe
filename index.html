@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    
+    <style>
+        #board
+        {
+            display: grid;
+            grid-template-columns: 140px 140px 140px;
+            grid-template-rows: 140px 140px 140px;
+            position:fixed;
+            left: 35%;
+            bottom: 40%;
+        }
+        .case
+        {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+   <div id="board">
+        <div id="one" class="case"><img src="" class="case1" alt="" id="00"></div>
+        <div id="two" class="case"><img src="" class="case1" alt="" id="01"></div>
+        <div id="three" class="case"><img src="" class="case1" alt="" id="0,2"></div>
+        <div id="four"class="case"><img src="" class="case1" alt="" id="1,0"></div>
+        <div id="five" class="case"><img src="" class="case1" alt="" id="1,1"></div>
+        <div id="six"class="case"><img src="" class="case1" alt="" id="1,2"></div>
+        <div id="seven"class="case"><img src="" class="case1" alt="" id="2,0"></div>
+        <div id="eight"class="case"><img src="" class="case1" alt="" id="2,1"></div>
+        <div id="nine"class="case"><img src="" class="case1" alt="" id="2,2"></div>
+   </div>
+   <script>
+        function Player() 
+        {   
+            let p=Object.create(Player.prototype);
+            p.score="";
+            p.name="";
+            p.symbol="";
+            Object.defineProperty(p, "getName", 
+            {
+                get :  ()=>this.name,
+            });
+            Object.defineProperty(p, "setName", 
+            {
+                get :  function(value){this.name=value;}
+            });
+            Object.defineProperty(p, "getScore", 
+            {
+                get :  ()=>this.score,
+            });
+            Object.defineProperty(p, "setScore", 
+            {
+                get :  function(value){this.score=value;}
+            });
+            Object.defineProperty(p, "getSymbol", 
+            {
+                get :  ()=>this.symbol,
+            });
+            Object.defineProperty(p, "setSymbol", 
+            {
+                get :  function(value){this.symbol=value;}
+            });
+            return p;
+        }
+        function Gameboard()
+        {   
+            let g=Object.create(Gameboard.prototype);
+            
+            g.board=[["circle","none","none"],["none","none","none"],["none","none","none"]];
+            Object.defineProperty(g,"setAt",
+            {
+                set : function(player,pst){this.board[pst]=player.Symbol}
+            });
+            g.setIcons=function(pst)
+            {
+               for(let i=0;i<=2;i++)
+               {
+                   for(let j=0;j<=2;j++)
+                   {
+                       
+                       let img=document.getElementById("00");
+                       
+                      // img.setAttribute("src","image"+this.board[pst]);
+                       alert(img.innerHTML)
+                   }
+               }
+            };
+            return g;
+        }
+        
+        
+        
+         
+    </script>
+   <script>
+        
+        var myboard=Gameboard();
+        var player1=Player(); var player2=Player();
+        player1.name="ousmane" ;player1.score="0";player1.symbol="circle"
+        player1.name="vlad" ;player1.score="0";player1.symbol="cross"
+        Array.from(document.getElementsByClassName("case")).forEach
+        (
+            function(element, index, array) 
+            {
+                element.addEventListener("click",function()
+                {
+                   let i=0;let j=0;
+                   myboard.setIcons(element.children[0].getAttribute("id"));
+                    //alert(document.getElementById(i+""+j).src)               
+                }
+                );
+            }
+        );
+            
+    
+    </script>
+</body>
+</html>
