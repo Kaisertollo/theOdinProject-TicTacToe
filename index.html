@@ -6,7 +6,6 @@
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    
     <style>
         #board
         {
@@ -39,23 +38,59 @@
        function Gameboard(board) 
        {
             this.board=board;
+            //this.board1=[["","",""],["","",""],["","",""]]
             this.setIcons=function(l,c,symbol)
             {
-                
                 this.board[l][c].setAttribute("src","images/"+symbol+".png");
             }
-            
             this.getBoard=()=>this.board;
+            this.checkforwin=function()
+            {
+                /*for(let l=0;l<=2;l++)
+                {
+                    let a=this.board[l][0];
+                    let test=false;
+                    for(let c=1;c<=2;c++)
+                    {
+                        if(a.src===this.board[l][c].src)
+                            test=true;
+                        else
+                            test=false
+                    }
+                    if(test)
+                        return true;
+                }*/
+                for(let c=0;c<=2;c++)
+                {
+                    let a=this.board[0][c];
+                    let test=false;
+                    for(let l=1;l<=2;l++)
+                    {
+                        if(a.src===this.board[l][c].src && a.src!="file:///home/tollo/Documents/the_odin-project/theOdinProject-TicTacToe/index.html")
+                        {
+                            test=true;
+                           //console.log(a.src+"et     "+this.board1[l][c].src);
+                        }
+                        else
+                            test=false
+                    }
+                    if(test)
+                        return true;
+                }
+                return false;
+            }
        }
+       
        function Player(name,symbol)
        {
            this.fullName=name;
-           this.score=""
+           this.score=0;
            this.symbol=symbol;
        }
        function gameFlow(player1,player2)
        {
            this.currentPlayer=player1;
+           round=0;
            this.switchPlayer=function()
            {
                 if(this.currentPlayer===player1)
@@ -69,10 +104,10 @@
    </script>
    <script>
         
-        var line1=[document.getElementById("00"),document.getElementById("01"),document.getElementById("02")];
-        var line2=[document.getElementById("10"),document.getElementById("11"),document.getElementById("12")];
-        var line3=[document.getElementById("20"),document.getElementById("21"),document.getElementById("22")];
-        var grid=[line1,line2,line3];
+        let line1=[document.getElementById("00"),document.getElementById("01"),document.getElementById("02")];
+        let line2=[document.getElementById("10"),document.getElementById("11"),document.getElementById("12")];
+        let line3=[document.getElementById("20"),document.getElementById("21"),document.getElementById("22")];
+        let grid=[line1,line2,line3];
         var myboard=new Gameboard(grid);
         var player1=new Player("tollo","circle");
         var player2=new Player("tollo","cross");
@@ -88,11 +123,18 @@
                     {
                         for(let c=0;c<=2;c++)
                         {
-                            if(a[l][c]===element.childNodes[0])
+                           if(a[l][c]===element.childNodes[0])
                             {    
                                 myboard.setIcons(l,c,gameflow.currentPlayer.symbol);
                                 gameflow.switchPlayer();
-                            }    
+                                if(myboard.checkforwin()===true)
+                                {
+                                    console.log("end of the game");
+                                }
+                                    
+                               
+                            } 
+                            
                         }
                     }
                 }
