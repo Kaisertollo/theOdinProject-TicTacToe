@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+
     <style>
         #board
         {
@@ -24,63 +24,66 @@
 </head>
 <body>
    <div id="board">
-        <div id="one" class="case"><img src="" class="case1" alt="" id="00"></div>
-        <div id="two" class="case"><img src="" class="case1" alt="" id="01"></div>
-        <div id="three" class="case"><img src="" class="case1" alt="" id="02"></div>
-        <div id="four"class="case"><img src="" class="case1" alt="" id="10"></div>
-        <div id="five" class="case"><img src="" class="case1" alt="" id="11"></div>
-        <div id="six"class="case"><img src="" class="case1" alt="" id="12"></div>
-        <div id="seven"class="case"><img src="" class="case1" alt="" id="20"></div>
-        <div id="eight"class="case"><img src="" class="case1" alt="" id="21"></div>
-        <div id="nine"class="case"><img src="" class="case1" alt="" id="22"></div>
+        <div id="one" class="case"></div>
+        <div id="two" class="case"></div>
+        <div id="three" class="case"></div>
+        <div id="four"class="case"></div>
+        <div id="five" class="case"></div>
+        <div id="six"class="case"></div>
+        <div id="seven"class="case"></div>
+        <div id="eight"class="case"></div>
+        <div id="nine"class="case"></div>
    </div>
    <script>
+       function Case(element,symbol)
+       {
+           this.element=element;
+           this.symbol=symbol;
+       }
        function Gameboard(board) 
        {
             this.board=board;
-            //this.board1=[["","",""],["","",""],["","",""]]
-            this.setIcons=function(l,c,symbol)
+            this.setIcons=function(e,symbol)
             {
-                this.board[l][c].setAttribute("src","images/"+symbol+".png");
+                var img=document.createElement("img")
+                img.src="images/"+symbol+".png";
+                e.appendChild(img);
+                for(let l=0;l<3;l++)
+                {
+                    for(let c=0;c<3;c++)
+                    {
+                        if(this.board[l][c].element===e)
+                        {
+                            this.board[l][c].symbol=symbol;
+                            return 0;
+                        }
+                    }
+                }
             }
             this.getBoard=()=>this.board;
             this.checkforwin=function()
             {
-                /*for(let l=0;l<=2;l++)
+                let l=0;
+                while(l<3)
                 {
-                    let a=this.board[l][0];
-                    let test=false;
-                    for(let c=1;c<=2;c++)
-                    {
-                        if(a.src===this.board[l][c].src)
-                            test=true;
-                        else
-                            test=false
-                    }
-                    if(test)
+                    if(this.board[l][0].symbol===this.board[l][1].symbol 
+                        && this.board[l][0].symbol===this.board[l][2].symbol)
                         return true;
-                }*/
-                for(let c=0;c<=2;c++)
-                {
-                    let a=this.board[0][c];
-                    let test=false;
-                    for(let l=1;l<=2;l++)
-                    {
-                        if(a.src===this.board[l][c].src && a.src!="file:///home/tollo/Documents/the_odin-project/theOdinProject-TicTacToe/index.html")
-                        {
-                            test=true;
-                           //console.log(a.src+"et     "+this.board1[l][c].src);
-                        }
-                        else
-                            test=false
-                    }
-                    if(test)
+                    else if(this.board[0][l].symbol===this.board[1][l].symbol 
+                             && this.board[0][l].symbol===this.board[2][l].symbol)
                         return true;
+                    else if(this.board[0][0].symbol===this.board[1][1].symbol 
+                             && this.board[0][0].symbol===this.board[2][2].symbol)
+                        return true;
+                    else if(this.board[0][2].symbol===this.board[1][1].symbol 
+                             && this.board[0][2].symbol===this.board[2][0].symbol)
+                        return true;      
+                    else
+                    l++;                           
                 }
                 return false;
             }
        }
-       
        function Player(name,symbol)
        {
            this.fullName=name;
@@ -104,43 +107,46 @@
    </script>
    <script>
         
-        let line1=[document.getElementById("00"),document.getElementById("01"),document.getElementById("02")];
-        let line2=[document.getElementById("10"),document.getElementById("11"),document.getElementById("12")];
-        let line3=[document.getElementById("20"),document.getElementById("21"),document.getElementById("22")];
-        let grid=[line1,line2,line3];
-        var myboard=new Gameboard(grid);
+        let line1=
+        [new Case(document.getElementById("one"),"1"),
+        new Case(document.getElementById("two"),"2"),new Case(document.getElementById("three"),"3")];
+        
+        let line2=
+        [new Case(document.getElementById("four"),"4"),
+        new Case(document.getElementById("five"),"5"),new Case(document.getElementById("six"),"6")];
+        
+        let line3=
+        [new Case(document.getElementById("seven"),"7"),
+        new Case(document.getElementById("eight"),"8"),new Case(document.getElementById("nine"),"9")];  
+
+
+        var myboard=new Gameboard([line1,line2,line3]);
         var player1=new Player("tollo","circle");
-        var player2=new Player("tollo","cross");
+        var player2=new Player("top","cross");
         var gameflow=new gameFlow(player1,player2);
         Array.from(document.getElementsByClassName("case")).forEach
         (
             function(element) 
             {
                 let a=myboard.getBoard();
-                element.addEventListener("click",function(e)
-                {
-                    for(let l=0;l<=2;l++)
-                    {
-                        for(let c=0;c<=2;c++)
-                        {
-                           if(a[l][c]===element.childNodes[0])
-                            {    
-                                myboard.setIcons(l,c,gameflow.currentPlayer.symbol);
-                                gameflow.switchPlayer();
-                                if(myboard.checkforwin()===true)
-                                {
-                                    console.log("end of the game");
-                                }
-                                    
-                               
-                            } 
-                            
-                        }
-                    }
-                }
-                );
+                element.addEventListener("click",eventhandler);
+                
             }
         );
+        function eventhandler(e)
+        {
+            myboard.setIcons(e.target,gameflow.currentPlayer.symbol);
+           
+            e.target.removeEventListener("click",eventhandler);
+            if(myboard.checkforwin())
+                {
+                    var w=document.createElement('p');
+                    w.innerHTML=gameflow.currentPlayer.fullName+"Wins";
+                    e.target.parentNode.appendChild(w);
+                    //alert("sss");
+                }
+                gameflow.switchPlayer();
+        }
             
     
     </script>
