@@ -60,7 +60,6 @@
                     }
                 }
             }
-            this.getBoard=()=>this.board;
             this.checkforwin=function()
             {
                 let l=0;
@@ -121,14 +120,14 @@
 
 
         var myboard=new Gameboard([line1,line2,line3]);
-        var player1=new Player("tollo","circle");
-        var player2=new Player("top","cross");
+        var player1=new Player(prompt("saisir nom player1"),"circle");
+        var player2=new Player(prompt("saisir nom player2"),"cross");
         var gameflow=new gameFlow(player1,player2);
         Array.from(document.getElementsByClassName("case")).forEach
         (
             function(element) 
             {
-                let a=myboard.getBoard();
+                //let a=myboard.board();
                 element.addEventListener("click",eventhandler);
                 
             }
@@ -143,7 +142,8 @@
                     var w=document.createElement('p');
                     w.innerHTML=gameflow.currentPlayer.fullName+"Wins";
                     e.target.parentNode.appendChild(w);
-                    //alert("sss");
+                    myboard.currentPlayer.score++;
+                    //if(player1.score==3)
                 }
                 gameflow.switchPlayer();
         }
